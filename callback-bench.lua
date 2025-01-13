@@ -5,11 +5,16 @@ ffi.cdef[[
   void loop(int n);
   void func(void);
 ]]
-local callback = ffi.load("./callback.dll")
+local callback
+if ffi.os == "Windows" then
+  callback = ffi.load("./callback.dll")
+else
+  callback = ffi.load("./libcallback.so")
+end
 local timeit = require("timeit")
 
 local function lfunc()
-  if (not try) then
+  if not try then
     print("I'm lua callback from C")
     try = true
   end 
